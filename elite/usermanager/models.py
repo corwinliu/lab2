@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 
 MAX_CHAR_LENGTH = 200
-MAX_FILE_LENGTH = 100000
+MAX_FILE_LENGTH = 3500000
 
 
 

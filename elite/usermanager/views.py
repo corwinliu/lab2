@@ -30,16 +30,17 @@ def setting(request):
 		
 		print request.FILES
 		if 'photo' in request.FILES:
-
-			try:
+			if request.FILES['photo'].size > 3500000:
+				return render_to_response('home.html',{'overflow':1
+		} ,context_instance=RequestContext(request))	
+			try:	
+				
 				
 				ph.photo = request.FILES['photo']
+
 				ph.save()
 				ph2 = PHOTO.objects.create()
 				t = random.randint(0,1000000)
-				print "=============="
-				print ph.photo.path
-				print "=============="
 				process(Image.open(ph.photo.path)).save(str(t)+'out.png')
 				ph2.photo.save("qwe",File(open(str(t)+'out.png')))
 			except Exception,e:
