@@ -121,4 +121,4 @@ def process(img):
 	# api of ReKognition
 	return reKognition(PERSONS_FILE, keyp)
 
-#process(Image.open('family.jpg')).save("out.png")
+#process(Image.open('friends.jpg')).save("out.png")

@@ -19,7 +19,7 @@ import json
 from django.http import HttpResponse
 from core.face_ana import process
 from PIL import Image
-
+import random
 
 def setting(request):
 	print "home"
@@ -36,8 +36,12 @@ def setting(request):
 				ph.photo = request.FILES['photo']
 				ph.save()
 				ph2 = PHOTO.objects.create()
-				process(Image.open(ph.photo.path)).save('out.png')
-				ph2.photo.save("qwe",File(open('out.png')))
+				t = random.randint(0,1000000)
+				print "=============="
+				print ph.photo.path
+				print "=============="
+				process(Image.open(ph.photo.path)).save(str(t)+'out.png')
+				ph2.photo.save("qwe",File(open(str(t)+'out.png')))
 			except Exception,e:
 				print "erro",e
 
