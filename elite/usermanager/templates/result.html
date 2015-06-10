@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 
-{% block title %}Profile{% endblock %}
+{% block title %}属性鉴定{% endblock %}
 
 {% block content %}
 <br>
 <br>
 {% if photo %}
 
-<img src='{{ photo.url }}' height="400" width="400" class="img-responsive" alt="Responsive image" class="img-thumbnail"/>
+<img src='{{ photo.url }}' height="300" width="300" class="img-responsive" alt="Responsive image" class="img-thumbnail"/>
 {% endif %}
 
 <button class="btn btn-primary ladda-button" data-style="expand-left" onclick="location.href='{% url 'usermanager:setting' %}'"><span class="ladda-label">继续鉴定</span></button>
