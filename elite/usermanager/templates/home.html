@@ -14,18 +14,18 @@
 
 {% block content %}
 
-
+<br>
 <form action="/home/" method="post" enctype="multipart/form-data" >
 	{% csrf_token %}
 	<div class="fileinput fileinput-new" data-provides="fileinput">
-	  <div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width: 200px; height: 150px;"></div>
+	  <div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width: 800px; height: 800px;"></div>
 	  <div>
-	    <span class="btn btn-default btn-file"><span class="fileinput-new">Select image</span><span class="fileinput-exists">Change</span><input type="file" name="photo" value="Submit" /></span>
-	    <a href="#" class="btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a>
+	    <span class="btn btn-default btn-file"><span class="fileinput-new">选择照片</span><span class="fileinput-exists">换张照片</span><input type="file" name="photo" value="Submit" /></span>
+	    <a href="#" class="btn btn-default fileinput-exists" data-dismiss="fileinput">移除照片</a>
 	  </div>
 	</div>
 	<br>
-	<button type ="submit" class="btn btn-primary ladda-button" data-style="expand-right"><span class="ladda-label">submit</span></button>
+	<button type ="submit" class="btn btn-primary ladda-button" data-style="expand-right"><span class="ladda-label">鉴定</span></button>
 
 </form>
 
