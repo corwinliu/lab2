@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Profile{% endblock %}
+{%block head%}
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jasny-bootstrap/3.1.3/css/jasny-bootstrap.min.css">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/jasny-bootstrap/3.1.3/js/jasny-bootstrap.min.js"></script>
+<link rel="stylesheet" href="/static/ladda-bootstrap-master/dist/ladda-themeless.min.css">
+<script src="/static/ladda-bootstrap-master/dist/spin.min.js"></script>
+<script src="/static/ladda-bootstrap-master/dist/ladda.min.js"></script>
+{%endblock%}
+
+
+{% block content %}
+
+
+<form action="/home/" method="post" enctype="multipart/form-data" >
+	{% csrf_token %}
+	<div class="fileinput fileinput-new" data-provides="fileinput">
+	  <div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width: 200px; height: 150px;"></div>
+	  <div>
+	    <span class="btn btn-default btn-file"><span class="fileinput-new">Select image</span><span class="fileinput-exists">Change</span><input type="file" name="photo" value="Submit" /></span>
+	    <a href="#" class="btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a>
+	  </div>
+	</div>
+	<br>
+	<button type ="submit" class="btn btn-primary ladda-button" data-style="expand-right"><span class="ladda-label">submit</span></button>
+
+</form>
+
+<script type="text/javascript">
+	Ladda.bind( 'button[type=submit]' );
+</script>
+
+{% endblock %}

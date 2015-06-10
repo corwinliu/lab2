@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block head %}
+  <script type="text/javascript">
+    function validate_form()
+    {
+      var check = document.getElementById('agreement');
+
+      if (check.checked == true)
+      {
+        return true;
+      }
+      else
+      {
+        alert("请同意使用协议。");
+        return false;
+      }
+
+    }
+  </script>
+{% endblock %}
+
+{% load bootstrap3 %}
+
+{% block title %}注册{% endblock %}
+
+{% block content %}
+
+
+<div class="container">
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <h1>注册<small>已有账号，<a href="{% url 'django.contrib.auth.views.login' %}"> 登陆。</a></small></h1>
+                    <br />
+                </div>
+            </div>
+
+            <div class="row">
+                <form action="{% url 'registration_register' %}" method="post" role="form" class="form-horizontal col-sm-10 col-sm-offset-1" onsubmit="return validate_form();">
+                    {% csrf_token %}
+                    <div class="col-sm-offset-2 col-sm-7">
+                        {% bootstrap_form form layout='horizontal' %}
+
+                        <div class="col-sm-offset-2">
+                            <div class="">
+                                <label for="agreement" class="agreement-label">
+                                    <input type="checkbox" id="agreement" name="agreement" /> 我已认真阅读并同意 《<a target="_blank" href="/agreement">使用协议</a>》.
+                                </label>
+                            </div>
+                        </div>
+
+                        <br /> 
+                        {% buttons %}
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button type="submit" class="btn btn-primary">注册</button>
+                            <button type="reset" class="btn btn-warning" value="reset">重置</button>
+                        </div>
+                        {% endbuttons %}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% include "foot.html" %}
+
+{% endblock %}

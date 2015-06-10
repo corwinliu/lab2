@@ -1,0 +1,5 @@
+激活{{ site.name }}的账号，请访问以下链接：
+
+http://{{ site.domain }}{% url 'registration_activate' activation_key %}
+
+此链接 {{ expiration_days }} 天内有效。
