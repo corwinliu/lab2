@@ -58,7 +58,7 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'elite.urls'
 
 WSGI_APPLICATION = 'elite.wsgi.application'
-MEDIA_ROOT = '/Users/yang1fan2/Desktop/network_lab2/elite/pictures/'
+MEDIA_ROOT = '/Users/yang1fan2/Desktop/lab2/elite/pictures/'
 MEDIA_URL = '/media/'
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 

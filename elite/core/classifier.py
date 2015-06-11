@@ -11,38 +11,38 @@ CLASSIFY_FN = "classify.txt"
 def classify(result):
 	age = result['age']
 # 0: female, 1: male -> 2: female, 1: male
-	gender = 2 - result['sex']
+	gender = int(2.5 - result['sex'])
 # a feature-value list for convenience of coding
 	fvl = []
-# facevalue is in [0, 10]
-	facevalue = result['beauty'] * 10
+# facevalue is in [0, 1]
+	facevalue = result['beauty']
 	fvl.append(facevalue)
-# value for beard is in [0, 10]
-	beard = result['beard'] * 10
+# value for beard is in [0, 1]
+	beard = result['beard']
 	fvl.append(beard)
-# value for mustache is in [0, 10]
-	mustache = result['mustache'] * 10
+# value for mustache is in [0, 1]
+	mustache = result['mustache']
 	fvl.append(mustache)
-# value for glass is in [0, 10]
-	glass = result['glasses'] * 10
+# value for glass is in [0, 1]
+	glass = result['glasses']
 	fvl.append(glass)
-# value for sunglass is in [0, 10]
-	sunglass = result['sunglasses'] * 10
+# value for sunglass is in [0, 1]
+	sunglass = result['sunglasses']
 	fvl.append(sunglass)
-# value for eyeclosed is in [0, 10]
-	eyeclosed = result['eye_closed'] * 10
+# value for eyeclosed is in [0, 1]
+	eyeclosed = result['eye_closed']
 	fvl.append(eyeclosed)
-# value for mouthopen is in [0, 10]
-	mouthopen = result['mouth_open_wide'] * 10
+# value for mouthopen is in [0, 1]
+	mouthopen = result['mouth_open_wide']
 	fvl.append(mouthopen)
-# value for each emotion is in [0, 10]
+# value for each emotion is in [0, 1]
 	emotion = result['emotion']
 	em_name = ['happy', 'angry', 'sad', 'confused', 'disgust', 'surprised', 'calm']
 	em_val = [0, 0, 0, 0, 0, 0, 0]
 	for em in emotion:
 		for i in range(0, len(em_name)):
 			if em_name[i] == em:
-				em_val[i] = emotion[em] * 10
+				em_val[i] = emotion[em]
 	for i in range(0, len(em_val)):
 		fvl.append(em_val[i])
 
@@ -66,15 +66,19 @@ def classify(result):
 		val = 0
 
 		# valid age interval
-		valid_age = 1
+		valid_age = 0
 		for j in range(0, m):
 			l = int(mread(fn))
 			r = int(mread(fn))
-			if (l >= 0 and age < l) or (r >= 0 and age > r):
-				valid_age = 0
-				break
+			a = float(mread(fn))
+			b = float(mread(fn))
+
+			if not ((l >= 0 and age < l) or (r >= 0 and age > r)):
+				valid_age = 1
+				val = a * age + b
+
 		if valid_age == 0:
-			attr.append((attr_name, val))
+			attr.append((attr_name, 0))
 			for j in range(0, 16):
 				mread(fn)
 			continue
@@ -82,18 +86,22 @@ def classify(result):
 		# gender restriction
 		valid_gender = int(mread(fn))
 		if valid_gender > 0 and valid_gender != gender:
-			attr.append((attr_name, val))
+			attr.append((attr_name, 0))
 			for j in range(0, 15):
 				mread(fn)
 			continue
 
 		# computing score for each feature
 		sum = 0
+
+		if (i == 2):
+			print val
 		for j in range(0, 15):
-			p = float(mread(fn))
+			t = mread(fn)
+			print t
+			p = float(t)
 			sum += abs(p)
 			val += fvl[j] * p
-		val /= sum
 
 		attr.append((attr_name, val))
 
@@ -107,8 +115,8 @@ def classify(result):
 	print "----------------------------"
 
 	attr.sort(key=lambda tup: -tup[1])
-#	for i in range(0, n):
-#		print attr[i][0], attr[i][1]
+	# for i in range(0, n):
+	# 	print attr[i][0], attr[i][1]
 
 	fn.close()
 

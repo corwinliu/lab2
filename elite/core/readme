@@ -1,0 +1,4 @@
+name
+age_interval_number
+age_interval_l age_interval_r a b
+gender ~ random

@@ -33,18 +33,20 @@ def setting(request):
 			if request.FILES['photo'].size > 3500000:
 				return render_to_response('home.html',{'overflow':1
 		} ,context_instance=RequestContext(request))	
-			try:	
-				
-				
-				ph.photo = request.FILES['photo']
+			ph.photo = request.FILES['photo']
+			ph.save()
+			ph2 = PHOTO.objects.create()
+			t = random.randint(0,1000000)
 
-				ph.save()
-				ph2 = PHOTO.objects.create()
-				t = random.randint(0,1000000)
-				process(Image.open(ph.photo.path)).save(str(t)+'out.png')
-				ph2.photo.save("qwe",File(open(str(t)+'out.png')))
-			except Exception,e:
-				print "erro",e
+			process(Image.open(ph.photo.path)).save(str(t)+'out.png')
+			ph2.photo.save("qwe",File(open(str(t)+'out.png')))
+
+			# try:	
+				
+				
+				
+			# except Exception,e:
+			# 	print "erro",e
 
 			return render_to_response('result.html',{'photo':ph2.photo} ,context_instance=RequestContext(request))
 		else:
