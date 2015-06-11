@@ -21,10 +21,13 @@ from core.face_ana import process
 from PIL import Image
 import random
 from django.core.urlresolvers import reverse
-
+import base64
 def result(request,pk):
 	print "======"
-	path = PHOTO.objects.get(pk=pk).photo.url
+	t = base64.decodestring(pk)
+	print type(t)
+	print t
+	path = PHOTO.objects.get(pk=t).photo.url
 	return render_to_response('result.html',{'url':path} ,context_instance=RequestContext(request))
 
 def setting(request):
@@ -48,7 +51,8 @@ def setting(request):
 				ph2.photo.save("qwe",File(open(str(t)+'out.png')))
 			except Exception,e:
 				print "erro",e
-			return HttpResponseRedirect(reverse('usermanager:result', args=(ph2.pk,)))
+			code = base64.encodestring(str(ph2.pk)).strip()
+			return HttpResponseRedirect(reverse('usermanager:result', args=(code,)))
 		else:
 			pass
 
