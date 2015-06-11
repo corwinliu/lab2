@@ -165,7 +165,7 @@ class API(object):
             rst = self.info.get_session(session_id = session_id)
             if rst['status'] != u'INQUEUE':
                 return rst
-
+            _print_debug(rst)
             time.sleep(referesh_interval)
 
     def update_request(self, request):
@@ -238,7 +238,7 @@ class _APIProxy(object):
             except (socket.error, urllib2.URLError) as e:
                 if retry < 0:
                     raise e
-
+                _print_debug('caught error: {}; retrying'.format(e))
                 time.sleep(self._api.retry_delay)
 
         if self._api.decode_result:

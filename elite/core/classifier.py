@@ -48,11 +48,12 @@ def classify(result):
 
 # value for random is in [0, 5]
 # a pseudo-random number is generated based on the attribute 'smile'
-#	smile = result['smile'] * 100 + 2
-#	random = 1
-#	for i in range(0, 10):
-#		random = (random * smile) % 137
-	random = 0#random / 137.0
+	smile = result['smile'] * 100 + 2
+	random = 1
+	for i in range(0, 10):
+		random = (random * smile) % 137
+	random /= 137.0
+	random = 0
 	fvl.append(random)
 
 	fn = codecs.open(CLASSIFY_FN, "r", "utf-8")
@@ -97,9 +98,7 @@ def classify(result):
 		if (i == 2):
 			print val
 		for j in range(0, 15):
-			t = mread(fn)
-			print t
-			p = float(t)
+			p = float(mread(fn))
 			sum += abs(p)
 			val += fvl[j] * p
 
@@ -115,8 +114,8 @@ def classify(result):
 	print "----------------------------"
 
 	attr.sort(key=lambda tup: -tup[1])
-	# for i in range(0, n):
-	# 	print attr[i][0], attr[i][1]
+	for i in range(0, n):
+		print attr[i][0], attr[i][1]
 
 	fn.close()
 

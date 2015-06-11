@@ -19,11 +19,10 @@ def draw_single_box(img, draw, box, offset, text_img):
 	wh = int(min(ww / float(text_img.size[0]) * text_img.size[1]
 		, WINDOW_H))
 
-	px = 0 + w / 2 - ww / 2
-	py = (wh + ABOVE_H) - ABOVE_H;
-
 	window = Image.new('RGBA', (ww * 2, wh + ABOVE_H),
 				(0,0,0,0))
+	px = 0 + window.size[0] / 2 - ww / 2
+	py = (wh + ABOVE_H) - ABOVE_H;
 	windraw = ImageDraw.Draw(window)
 	windraw.polygon([(px, py), (px + ww / 2 - ABOVE_H, py),
 			(px + ww / 2, wh + ABOVE_H),
@@ -32,7 +31,7 @@ def draw_single_box(img, draw, box, offset, text_img):
 			(px, py - wh), (px, py)],
 			fill=(255,255,255,192))
 			#fill=(0,192,255,192))
-	woff = (x, y - wh - ABOVE_H)
+	woff = (x + w / 2 - window.size[0] / 2, y - wh - ABOVE_H)
 
 	img.paste(window, woff, mask=window)
 
@@ -44,7 +43,7 @@ def draw_single_box(img, draw, box, offset, text_img):
 	attr_img = text_img.resize((int(rw * 1.2), int(rh * 1.2)))
 
 	# So as the value 0.6 (0.6 = 1.2 / 2)
-	img.paste(attr_img, (int(x + px + ww * 0.5 - rw * 0.6),
+	img.paste(attr_img, (int(x + w * 0.5 - rw * 0.6),
 			     int(y - wh - ABOVE_H + wh * 0.5 - rh * 0.6)),
 			     mask=attr_img)
 

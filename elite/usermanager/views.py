@@ -20,8 +20,15 @@ from django.http import HttpResponse
 from core.face_ana import process
 from PIL import Image
 import random
+from django.core.urlresolvers import reverse
+
+def result(request,pk):
+	print "======"
+	path = PHOTO.objects.get(pk=pk).photo.url
+	return render_to_response('result.html',{'url':path} ,context_instance=RequestContext(request))
 
 def setting(request):
+	
 	print "home"
 	user =request.user
 	ph=PHOTO.objects.create()
@@ -31,28 +38,22 @@ def setting(request):
 		print request.FILES
 		if 'photo' in request.FILES:
 			if request.FILES['photo'].size > 3500000:
-				return render_to_response('home.html',{'overflow':1
-		} ,context_instance=RequestContext(request))	
-			ph.photo = request.FILES['photo']
-			ph.save()
-			ph2 = PHOTO.objects.create()
-			t = random.randint(0,1000000)
-
-			process(Image.open(ph.photo.path)).save(str(t)+'out.png')
-			ph2.photo.save("qwe",File(open(str(t)+'out.png')))
-
-			# try:	
-				
-				
-				
-			# except Exception,e:
-			# 	print "erro",e
-
-			return render_to_response('result.html',{'photo':ph2.photo} ,context_instance=RequestContext(request))
+				return render_to_response('home.html',{'overflow':1} ,context_instance=RequestContext(request))	
+			try:	
+				ph.photo = request.FILES['photo']
+				ph.save()
+				ph2 = PHOTO.objects.create()
+				t = random.randint(0,1000000)
+				process(Image.open(ph.photo.path)).save(str(t)+'out.png')
+				ph2.photo.save("qwe",File(open(str(t)+'out.png')))
+			except Exception,e:
+				print "erro",e
+			return HttpResponseRedirect(reverse('usermanager:result', args=(ph2.pk,)))
 		else:
 			pass
 
 	return render_to_response('home.html',{
 		} ,context_instance=RequestContext(request))			
 	
+
 	

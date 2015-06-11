@@ -24,9 +24,9 @@ def print_result(hint, result):
 		if type(obj) is list:
 			return [encode(i) for i in obj]
 		return obj
-#	print hint
+	print hint
 	result = encode(result)
-#	print '\n'.join(['  ' + i for i in pformat(result, width = 75).split('\n')])
+	print '\n'.join(['  ' + i for i in pformat(result, width = 75).split('\n')])
 
 def facepp(api, PERSONS):
 	# Step 1: Create a group to add these persons in
@@ -37,7 +37,7 @@ def facepp(api, PERSONS):
 	for (name, fn) in PERSONS:
 		result = api.detection.detect(post = True,
 					img = File(fn), mode = "normal")
-		#print_result('Detection result for {}:'.format(name), result)
+		print_result('Detection result for {}:'.format(name), result)
 		pl = []
 		for i in range(0, len(result['face'])):
 			pl.append(result['face'][i]['position']['nose'])
@@ -89,7 +89,7 @@ def reKognition(PERSONS_FILE, keyp):
 		)
 		result = json.loads(json_resp.text)
 
-		#print_result("", result)
+		print_result("", result)
 
 		# elimit inaccurately detected face
 		result = elimit_wrong(name, keyp, result)
@@ -101,8 +101,8 @@ def reKognition(PERSONS_FILE, keyp):
 #		img.save(outname(fn, 'png'), 'PNG')
 
 def process(img):
-	if (img.size[0] * img.size[1] >= 500000):
-		r = math.sqrt(img.size[0] * img.size[1] / 500000.0)
+	if (img.size[0] * img.size[1] >= 200000):
+		r = math.sqrt(img.size[0] * img.size[1] / 200000.0)
 		img = img.resize((int(img.size[0] / r), int(img.size[1] / r)))
 	img.save('tmp.png')
 
@@ -121,14 +121,19 @@ def process(img):
 	try:
 		keyp = facepp(api, PERSONS_FILE)
 	finally:
-		api.group.delete(group_name = 'test')
+		try:
+			api.group.delete(group_name = 'test')
+		finally:
+			pass
 
 	# api of ReKognition
 	return reKognition(PERSONS_FILE, keyp)
-#process(Image.open("/Users/yang1fan2/Desktop/lab2/elite/pictures/photos/2015/06/11/family_vxTNGbe.jpg")).save('out.png')
 
-# for i in range(0, 1):
-# 	print i
-# 	if not os.path.isfile('train/' + str(i) + '.jpg'):
-# 		continue
-# 	process(Image.open('train/' + str(i) + '.jpg')).save("train_res/" + str(i) + "_out.png")
+#process(Image.open('family.jpg')).save("family_out.png")
+'''
+for i in range(0, 60):
+	print i
+	if not os.path.isfile('train/' + str(i) + '.jpg'):
+		continue
+	process(Image.open('train/' + str(i) + '.jpg')).save("train_res/" + str(i) + "_out.png")
+'''
