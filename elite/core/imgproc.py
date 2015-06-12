@@ -15,7 +15,7 @@ def draw_single_box(img, draw, box, offset, text_img):
 	draw.line([(x, y), (x + w, y), (x + w, y + h), (x, y + h), (x, y)],
 			fill=(255,255,255), width = 1)
 
-	ww = min(WINDOW_W, w)
+	ww = min(WINDOW_W, int(w * 1.8))
 	wh = int(min(ww / float(text_img.size[0]) * text_img.size[1]
 		, WINDOW_H))
 
@@ -52,11 +52,26 @@ def draw_single_box(img, draw, box, offset, text_img):
 
 def draw_box(img, result):
 	img_w, img_h = img.size
-	bg = Image.new('RGBA', (int(img_w + max(WINDOW_W, img_w * 0.1)),
-				int(img_h + max(WINDOW_H * 2, img_h * 0.2))),
+
+	# calculate the tightest valid boundary for this image
+	tvb_x1 = 0	# for width
+	tvb_x2 = 0
+	tvb_y1 = 0	# for height
+	tvb_y2 = 0
+	for i in range(0, len(result)):
+		rbtx = result[i]['boundingbox']['tl']['x']
+		rbty = result[i]['boundingbox']['tl']['y']
+		rbsw = result[i]['boundingbox']['size']['width']
+		rbsh = result[i]['boundingbox']['size']['height']
+		tvb_y1 = max(tvb_y1, -(rbty - ABOVE_H - WINDOW_H))
+		tvb_x1 = max(tvb_x1, -(rbtx + rbsw / 2 - WINDOW_W / 2))
+		tvb_x2 = max(tvb_x2, rbtx + rbsw / 2 + WINDOW_W / 2 - img_w)
+
+	bg = Image.new('RGBA', (int(img_w + tvb_x1 + tvb_x2),
+				int(img_h + tvb_y1)),
 			(255,255,255,255))
 	bg_w, bg_h = bg.size
-	offset = ((bg_w - img_w) / 2, int((bg_h - img_h) / 2))
+	offset = (int(tvb_x1), int(tvb_y1))
 	bg.paste(img, offset)
 	img = bg
 	offset = {'x': offset[0], 'y': offset[1]}

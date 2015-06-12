@@ -52,6 +52,8 @@ def elimit_wrong(name, keyp, result):
 		if (kname == name):
 			nl = knl
 			break
+	if (len(nl) == 0):
+		return result;
 	img_h = result['ori_img_size']['height']
 	img_w = result['ori_img_size']['width']
 	rm = []
@@ -146,9 +148,8 @@ def exif_process(img, fw):
 def process(img):
 	original_img = img
 	img = exif_process(img, True)
-	if (img.size[0] * img.size[1] >= 200000):
-		r = math.sqrt(img.size[0] * img.size[1] / 200000.0)
-		img = img.resize((int(img.size[0] / r), int(img.size[1] / r)))
+	r = math.sqrt(img.size[0] * img.size[1] / 240000.0)
+	img = img.resize((int(img.size[0] / r), int(img.size[1] / r)))
 	img.save('tmp.png')
 
 	PERSONS_FILE = [
@@ -174,9 +175,12 @@ def process(img):
 	# api of ReKognition
 	return reKognition(PERSONS_FILE, keyp)
 
-#process(Image.open('bug_data/image_yCrSrDn.jpg')).save("bug_data/out.png")
+
+#process(Image.open('bug_data/mmexport1433953938050_KuZtUuH.jpg')).save("bug_data/out.png")
+#process(Image.open('../pictures/1.jpg')).save("../pictures/1_out.png")
+#process(Image.open('../pictures/2.jpg')).save("../pictures/2_out.png")
 '''
-for i in range(0, 60):
+for i in range(52, 53):
 	print i
 	if not os.path.isfile('../old/train/' + str(i) + '.jpg'):
 		continue

@@ -29,7 +29,11 @@ def result(request,pk):
 	t =t[0:len(t)-5]
 	
 	print t
-	path = PHOTO.objects.get(pk=t).photo.url
+	path=""
+	try:
+		path = PHOTO.objects.get(pk=t).photo.url
+	except:
+		pass
 	return render_to_response('result.html',{'url':path} ,context_instance=RequestContext(request))
 
 def setting(request):
