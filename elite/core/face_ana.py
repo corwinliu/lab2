@@ -101,8 +101,8 @@ def reKognition(PERSONS_FILE, keyp):
 #		img.save(outname(fn, 'png'), 'PNG')
 
 def process(img):
-	if (img.size[0] * img.size[1] >= 200000):
-		r = math.sqrt(img.size[0] * img.size[1] / 200000.0)
+	if (img.size[0] * img.size[1] >= 100000):
+		r = math.sqrt(img.size[0] * img.size[1] / 100000.0)
 		img = img.resize((int(img.size[0] / r), int(img.size[1] / r)))
 	img.save('tmp.png')
 
@@ -129,7 +129,7 @@ def process(img):
 	# api of ReKognition
 	return reKognition(PERSONS_FILE, keyp)
 
-#process(Image.open('family.jpg')).save("family_out.png")
+process(Image.open('3.pic_hd.jpg')).save("out.png")
 '''
 for i in range(0, 60):
 	print i

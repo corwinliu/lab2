@@ -25,7 +25,9 @@ import base64
 def result(request,pk):
 	print "======"
 	t = base64.decodestring(pk)
-	print type(t)
+	t=t[5:]
+	t =t[0:len(t)-5]
+	
 	print t
 	path = PHOTO.objects.get(pk=t).photo.url
 	return render_to_response('result.html',{'url':path} ,context_instance=RequestContext(request))
@@ -51,7 +53,7 @@ def setting(request):
 				ph2.photo.save("qwe",File(open(str(t)+'out.png')))
 			except Exception,e:
 				print "erro",e
-			code = base64.encodestring(str(ph2.pk)).strip()
+			code = base64.encodestring("hello"+str(ph2.pk)+"world").strip()
 			return HttpResponseRedirect(reverse('usermanager:result', args=(code,)))
 		else:
 			pass
