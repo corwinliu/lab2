@@ -1,3 +1,4 @@
+#coding utf-8
 FACEPP_KEY = '5d6e636245ebcac64710ea947d9c3a52'
 FACEPP_SECRET = 'DWzjsy2dNcLGaoOayWgR2JtnpSZw6uoA'
 ReKognition_API_KEY = '8RRuJV77BxrooG4F'
@@ -11,6 +12,7 @@ import imgproc
 import base64
 import json
 from PIL import Image
+from PIL import ExifTags
 from myfacepp import API, File
 from myutils import outname
 from pprint import pformat
@@ -100,9 +102,52 @@ def reKognition(PERSONS_FILE, keyp):
 		return img
 #		img.save(outname(fn, 'png'), 'PNG')
 
+def exif_process(img, fw):
+	# pre-process for EXIF orientation information
+	if (img._getexif() == None):
+		return img
+	exif = dict((ExifTags.TAGS[k], v) for k, v in img._getexif().items() if k in ExifTags.TAGS)
+	ore = exif['Orientation']
+	if ore == 2:
+		# Vertical Mirror
+		img = img.transpose(Image.FLIP_LEFT_RIGHT)
+        elif ore == 3:
+		# Rotation 180
+		img = img.transpose(Image.ROTATE_180)
+        elif ore == 4:
+		# Horizontal Mirror
+		img = img.transpose(Image.FLIP_TOP_BOTTOM)
+        elif ore == 5:
+		# Horizontal Mirror + Rotation 90 CCW
+		if (fw):
+			img = img.transpose(Image.FLIP_TOP_BOTTOM).transpose(Image.ROTATE_90)
+		else:
+			img = img.transpose(Image.ROTATE_270).transpose(Image.FLIP_TOP_BOTTOM)
+        elif ore == 6:
+		# Rotation 270
+		if (fw):
+			img = img.transpose(Image.ROTATE_270)
+		else:
+			img = img.transpose(Image.ROTATE_90)
+        elif ore == 7:
+		# Horizontal Mirror + Rotation 270
+		if (fw):
+			img = img.transpose(Image.FLIP_TOP_BOTTOM).transpose(Image.ROTATE_270)
+		else:
+			img = img.transpose(Image.ROTATE_90).transpose(Image.FLIP_TOP_BOTTOM)
+        elif ore == 8:
+		# Rotation 90
+		if (fw):
+			img = img.transpose(Image.ROTATE_90)
+		else:
+			img = img.transpose(Image.ROTATE_270)
+	return img
+
 def process(img):
-	if (img.size[0] * img.size[1] >= 100000):
-		r = math.sqrt(img.size[0] * img.size[1] / 100000.0)
+	original_img = img
+	img = exif_process(img, True)
+	if (img.size[0] * img.size[1] >= 200000):
+		r = math.sqrt(img.size[0] * img.size[1] / 200000.0)
 		img = img.resize((int(img.size[0] / r), int(img.size[1] / r)))
 	img.save('tmp.png')
 
@@ -129,11 +174,11 @@ def process(img):
 	# api of ReKognition
 	return reKognition(PERSONS_FILE, keyp)
 
-process(Image.open('3.pic_hd.jpg')).save("out.png")
+#process(Image.open('bug_data/image_yCrSrDn.jpg')).save("bug_data/out.png")
 '''
 for i in range(0, 60):
 	print i
-	if not os.path.isfile('train/' + str(i) + '.jpg'):
+	if not os.path.isfile('../old/train/' + str(i) + '.jpg'):
 		continue
-	process(Image.open('train/' + str(i) + '.jpg')).save("train_res/" + str(i) + "_out.png")
+	process(Image.open('../old/train/' + str(i) + '.jpg')).save("../old/train_res/" + str(i) + "_out.png")
 '''

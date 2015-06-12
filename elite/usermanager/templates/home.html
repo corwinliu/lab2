@@ -9,13 +9,13 @@
 <link rel="stylesheet" href="/static/ladda-bootstrap-master/dist/ladda-themeless.min.css">
 <script src="/static/ladda-bootstrap-master/dist/spin.min.js"></script>
 <script src="/static/ladda-bootstrap-master/dist/ladda.min.js"></script>
+
 {%endblock%}
 
 
 {% block content %}
 
 <br>
-
 <form action="/home/" method="post" enctype="multipart/form-data" >
 	{% csrf_token %}
 	<div class="fileinput fileinput-new" data-provides="fileinput">
@@ -31,10 +31,15 @@
 	<button type ="submit" class="btn btn-primary ladda-button" data-style="expand-right"><span class="ladda-label">鉴定</span></button>
 </form>
 右上角分享朋友圈:)
+<br>
 (ps:使用收费网)
 {%if overflow%}
 图片应该小于3Mb
 {%endif%}
+
+
+
+
 <script type="text/javascript">
 	Ladda.bind( 'button[type=submit]' );
 </script>
