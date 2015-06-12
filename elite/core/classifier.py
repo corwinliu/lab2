@@ -4,6 +4,8 @@ import math
 import codecs
 from myutils import mread
 from myutils import mread_init
+from myutils import prandom_init
+from myutils import prandom
 
 LABEL_FN = "label/"
 CLASSIFY_FN = "classify.txt"
@@ -64,6 +66,13 @@ def classify(result):
 	for i in range(0, n):
 		attr_name = mread(fn)
 		m = int(mread(fn))
+
+		if m == -1:
+			# the pidx in 'classify.txt' starts from 1
+			pidx = int(mread(fn)) - 1
+			attr.append((attr_name, attr[pidx][1], i + 1))
+			continue
+
 		val = 0
 
 		# valid age interval
@@ -79,7 +88,7 @@ def classify(result):
 				val = a * age + b
 
 		if valid_age == 0:
-			attr.append((attr_name, 0))
+			attr.append((attr_name, 0, i + 1))
 			for j in range(0, 16):
 				mread(fn)
 			continue
@@ -87,7 +96,7 @@ def classify(result):
 		# gender restriction
 		valid_gender = int(mread(fn))
 		if valid_gender > 0 and valid_gender != gender:
-			attr.append((attr_name, 0))
+			attr.append((attr_name, 0, i + 1))
 			for j in range(0, 15):
 				mread(fn)
 			continue
@@ -102,7 +111,7 @@ def classify(result):
 			sum += abs(p)
 			val += fvl[j] * p
 
-		attr.append((attr_name, val))
+		attr.append((attr_name, val, i + 1))
 
 	best_attr = attr[0]
 	index  = 0
@@ -114,9 +123,22 @@ def classify(result):
 	print "----------------------------"
 
 	attr.sort(key=lambda tup: -tup[1])
+
+	ed = n
+	for i in range(1, n):
+		if abs(attr[i][1] - attr[i - 1][1]) >= 0.0001:
+			ed = i - 1
+			break
+	# select a random attribute from similar attributes
+	rand = int(prandom() * (ed + 1))
+	temp = attr[0]
+	attr[0] = attr[rand]
+	attr[rand] = temp
+
 	for i in range(0, n):
 		print attr[i][0], attr[i][1]
 
 	fn.close()
 
+	return attr
 	return LABEL_FN + str(index + 1) + ".png"

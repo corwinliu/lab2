@@ -12,7 +12,7 @@ import imgproc
 import base64
 import json
 from random import random
-from PIL import Image
+import Image
 from PIL import ExifTags
 from myfacepp import API, File
 from myutils import outname
@@ -32,11 +32,8 @@ def print_result(hint, result):
 	print '\n'.join(['  ' + i for i in pformat(result, width = 75).split('\n')])
 
 def facepp(api, PERSONS):
-	# Step 1: Create a group to add these persons in
-
-
 	keyp = []
-	# Step 2: Detect faces from those images and add them to the persons
+	# Detect faces from those images and add them to the persons
 	for (name, fn) in PERSONS:
 		result = api.detection.detect(post = True,
 					img = File(fn), mode = "normal")
@@ -170,10 +167,7 @@ def process(img):
 	try:
 		keyp = facepp(api, PERSONS_FILE)
 	finally:
-		try:
-			pass
-		finally:
-			pass
+		pass
 
 	# api of ReKognition
 	ret = reKognition(PERSONS_FILE, keyp)
@@ -181,13 +175,11 @@ def process(img):
 	return ret
 
 
-# process(Image.open('../pictures/lxq.jpg')).save("../pictures/lxq_out.png")
-# process(Image.open('../pictures/1.jpg')).save("../pictures/1_out.png")
-# process(Image.open('../pictures/2.jpg')).save("../pictures/2_out.png")
+#process(Image.open('../pictures/lxq.jpg')).save("../pictures/lxq_out.png")
 '''
-for i in range(52, 53):
+for i in range(1, 15):
 	print i
-	if not os.path.isfile('../old/train/' + str(i) + '.jpg'):
+	if not os.path.isfile('../pictures/' + str(i) + '.jpg'):
 		continue
-	process(Image.open('../old/train/' + str(i) + '.jpg')).save("../old/train_res/" + str(i) + "_out.png")
+	process(Image.open('../pictures/' + str(i) + '.jpg')).save("../pictures/" + str(i) + "_out.png")
 '''

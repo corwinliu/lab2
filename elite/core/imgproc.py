@@ -1,8 +1,12 @@
 # -*- coding: utf-8 -*-
-from PIL import Image, ImageDraw, ImageFilter, ImageFont
+import Image, ImageDraw, ImageFilter, ImageFont
 import classifier
 from myutils import outname
+from random import random
+from myutils import prandom
+from myutils import prandom_init
 
+LABEL_FN = "label/"
 WINDOW_W = 120
 WINDOW_H = 80
 ABOVE_H = 10
@@ -78,8 +82,45 @@ def draw_box(img, result):
 
 	draw = ImageDraw.Draw(img)
 
+	prandom_init()
+	attrs = []
 	for i in range(0, len(result)):
-		text_fn = classifier.classify(result[i])
+		attrs.append(classifier.classify(result[i]))
+
+	# A algorithm to assure the diversity of attributes:
+	# 	if there are multiple same attributes, select one of them,
+	# 	change the attributes of the corresponding people to a
+	#	secondary attributes. Repeat.
+	np = len(result)
+	ca = []
+	for i in range(0, np):
+		ca.append(0)
+	while True:
+		'''
+		print "======================"
+		for i in range(0, np):
+			print attrs[i][ca[i]][0]
+		print "======================="
+		'''
+		stop = True
+		for i in range(0, np):
+			# get the index of the best attribute
+			idxi = attrs[i][ca[i]][2]
+			eq = [i]
+			for j in range(i + 1, np):
+				idxj = attrs[j][ca[j]][2]
+				if idxi == idxj:
+					eq.append(j)
+			if len(eq) > 1:
+				s = int(prandom() * len(eq))
+				ca[eq[s]] += 1
+				stop = False
+				break
+		if stop:
+			break
+
+	for i in range(0, len(result)):
+		text_fn = LABEL_FN + str(attrs[i][ca[i]][2]) + ".png"
 		img = draw_single_box(img, draw, result[i]['boundingbox'],
 					offset, Image.open(text_fn))
 	return img

@@ -25,3 +25,10 @@ mread.fn = -1
 
 def outname(fn, sfx):
 	return ".".join(fn.split('.')[:-1]) + "_out." + sfx
+
+def prandom_init():
+	prandom.t = 1
+
+def prandom():
+	prandom.t = prandom.t * 97651 % 1000000007
+	return prandom.t / float(1000000007)
