@@ -33,7 +33,7 @@ def print_result(hint, result):
 
 def facepp(api, PERSONS):
 	# Step 1: Create a group to add these persons in
-	api.group.create(group_name = 'test')
+
 
 	keyp = []
 	# Step 2: Detect faces from those images and add them to the persons
@@ -171,7 +171,7 @@ def process(img):
 		keyp = facepp(api, PERSONS_FILE)
 	finally:
 		try:
-			api.group.delete(group_name = 'test')
+			pass
 		finally:
 			pass
 
