@@ -12,7 +12,7 @@ import imgproc
 import base64
 import json
 from random import random
-import Image
+from PIL import Image
 from PIL import ExifTags
 from myfacepp import API, File
 from myutils import outname

@@ -135,9 +135,7 @@ def classify(result):
 	attr[0] = attr[rand]
 	attr[rand] = temp
 
-	for i in range(0, n):
-		print attr[i][0], attr[i][1]
-
+	
 	fn.close()
 
 	return attr

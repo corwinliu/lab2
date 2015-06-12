@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import Image, ImageDraw, ImageFilter, ImageFont
+from PIL import Image, ImageDraw, ImageFilter, ImageFont
 import classifier
 from myutils import outname
 from random import random
