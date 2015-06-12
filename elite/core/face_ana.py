@@ -11,6 +11,7 @@ import requests
 import imgproc
 import base64
 import json
+from random import random
 from PIL import Image
 from PIL import ExifTags
 from myfacepp import API, File
@@ -150,7 +151,9 @@ def process(img):
 	img = exif_process(img, True)
 	r = math.sqrt(img.size[0] * img.size[1] / 240000.0)
 	img = img.resize((int(img.size[0] / r), int(img.size[1] / r)))
-	img.save('tmp.png')
+
+	rand = str(random())
+	img.save('tmp' + rand + '.png')
 
 	PERSONS_FILE = [
 	#	('Obama', 'Obama1.jpg'),
@@ -159,7 +162,7 @@ def process(img):
 	#	('Disgust', 'disgust.jpg'),
 	#	('Fear', 'fear2.jpg'),
 	#	('Family', 'family.jpg')
-		('TEMP', 'tmp.png')
+		('TEMP' + rand, 'tmp' + rand + '.png')
 	]
 
 	#face++ api
@@ -173,12 +176,14 @@ def process(img):
 			pass
 
 	# api of ReKognition
-	return reKognition(PERSONS_FILE, keyp)
+	ret = reKognition(PERSONS_FILE, keyp)
+	os.remove('tmp' + rand + '.png')
+	return ret
 
 
-#process(Image.open('bug_data/mmexport1433953938050_KuZtUuH.jpg')).save("bug_data/out.png")
-#process(Image.open('../pictures/1.jpg')).save("../pictures/1_out.png")
-#process(Image.open('../pictures/2.jpg')).save("../pictures/2_out.png")
+# process(Image.open('../pictures/lxq.jpg')).save("../pictures/lxq_out.png")
+# process(Image.open('../pictures/1.jpg')).save("../pictures/1_out.png")
+# process(Image.open('../pictures/2.jpg')).save("../pictures/2_out.png")
 '''
 for i in range(52, 53):
 	print i

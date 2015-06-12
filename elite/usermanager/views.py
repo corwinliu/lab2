@@ -22,7 +22,8 @@ from PIL import Image
 import random
 from django.core.urlresolvers import reverse
 import base64
-def result(request,pk):
+import datetime
+def result(request,pk,ck):
 	print "======"
 	t = base64.decodestring(pk)
 	t=t[5:]
@@ -34,7 +35,7 @@ def result(request,pk):
 		path = PHOTO.objects.get(pk=t).photo.url
 	except:
 		pass
-	return render_to_response('result.html',{'url':path} ,context_instance=RequestContext(request))
+	return render_to_response('result.html',{'url':path,'ck':ck} ,context_instance=RequestContext(request))
 
 def setting(request):
 	
@@ -48,6 +49,10 @@ def setting(request):
 		if 'photo' in request.FILES:
 			if request.FILES['photo'].size > 3500000:
 				return render_to_response('home.html',{'overflow':1} ,context_instance=RequestContext(request))	
+
+#log
+			LOG.objects.create(meta = request.META,date =datetime.datetime.now())
+
 			try:	
 				ph.photo = request.FILES['photo']
 				ph.save()
@@ -57,8 +62,14 @@ def setting(request):
 				ph2.photo.save("qwe",File(open(str(t)+'out.png')))
 			except Exception,e:
 				print "erro",e
-			code = base64.encodestring("hello"+str(ph2.pk)+"world").strip()
-			return HttpResponseRedirect(reverse('usermanager:result', args=(code,)))
+			ck = 0
+			if ph2.photo:
+				code = base64.encodestring("hello"+str(ph2.pk)+"world").strip()
+				
+			else:
+				code = base64.encodestring("hello"+str(ph.pk)+"world").strip()
+				ck=1
+			return HttpResponseRedirect(reverse('usermanager:result', args=(code,ck,)))
 		else:
 			pass
 

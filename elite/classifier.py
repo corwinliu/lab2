@@ -114,8 +114,7 @@ def classify(result):
 	print "----------------------------"
 
 	attr.sort(key=lambda tup: -tup[1])
-	for i in range(0, n):
-		print attr[i][0], attr[i][1]
+	
 
 	fn.close()
 
