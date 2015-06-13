@@ -51,12 +51,9 @@ def classify(result):
 # value for random is in [0, 5]
 # a pseudo-random number is generated based on the attribute 'smile'
 	smile = result['smile'] * 100 + 2
-	random = 1
-	for i in range(0, 10):
-		random = (random * smile) % 137
-	random /= 137.0
-	random = 0
-	fvl.append(random)
+	for i in range(0, int(smile)):
+		prandom()
+	fvl.append(0)
 
 	fn = codecs.open(CLASSIFY_FN, "r", "utf-8")
 
@@ -135,7 +132,7 @@ def classify(result):
 	attr[0] = attr[rand]
 	attr[rand] = temp
 
-	
+
 	fn.close()
 
 	return attr
